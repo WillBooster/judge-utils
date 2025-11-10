@@ -1,6 +1,6 @@
 const ACCEPTABLE_FLOAT_ERROR = 1e-6;
 
-export function compareStdioAsSpaceSeparatedTokens(received: string, expected: string): boolean {
+export function compareStdoutAsSpaceSeparatedTokens(received: string, expected: string): boolean {
   // Consecutive white spaces (including tabs, page breaks, and line breaks) are treated as one space character.
   const receivedTokens = received.trim().split(/\s+/);
   const expectedTokens = expected.trim().split(/\s+/);
