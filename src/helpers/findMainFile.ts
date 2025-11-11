@@ -5,7 +5,7 @@ import { languageIdToDefinition } from '../types/language.js';
 // The last is most prioritized.
 const PRIOTIZED_MAIN_FILE_NAMES = ['index', 'main'] as const;
 
-export async function findMainFile(cwd: string, language?: string | string[]): Promise<string | undefined> {
+export async function findMainFile(cwd: string, language?: string | readonly string[]): Promise<string | undefined> {
   const fileExtensions =
     language && [language].flat().flatMap((language) => languageIdToDefinition[language]?.fileExtension ?? []);
 
@@ -21,9 +21,10 @@ export async function findMainFile(cwd: string, language?: string | string[]): P
     );
 
     if (
-      !mainFileName || direntPrioryty !== mainFilePrioryty
-        ? direntPrioryty > mainFilePrioryty
-        : dirent.name.localeCompare(mainFileName) < 0
+      !mainFileName ||
+      (direntPrioryty === mainFilePrioryty
+        ? dirent.name.localeCompare(mainFileName) < 0
+        : direntPrioryty > mainFilePrioryty)
     ) {
       mainFileName = dirent.name;
       mainFilePrioryty = direntPrioryty;
