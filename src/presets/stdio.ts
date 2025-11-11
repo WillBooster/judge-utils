@@ -3,11 +3,12 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
-import { parseArgs } from '../helpers/args.js';
-import { spawnSyncWithTimeout } from '../helpers/childProcess.js';
-import { readProblemMarkdownFrontMatter, readTestCases } from '../helpers/fs.js';
-import { compareStdoutAsSpaceSeparatedTokens } from '../helpers/stdio.js';
-import { encodeFileForTestCaseResult, printTestCaseResult } from '../helpers/testCaseResult.js';
+import { compareStdoutAsSpaceSeparatedTokens } from '../helpers/compareStdoutAsSpaceSeparatedTokens.js';
+import { parseArgs } from '../helpers/parseArgs.js';
+import { encodeFileForTestCaseResult, printTestCaseResult } from '../helpers/printTestCaseResult.js';
+import { readProblemMarkdownFrontMatter } from '../helpers/readProblemMarkdownFrontMatter.js';
+import { readTestCases } from '../helpers/readTestCases.js';
+import { spawnSyncWithTimeout } from '../helpers/spawnSyncWithTimeout.js';
 import { DecisionCode } from '../types/decisionCode.js';
 import type { TestCaseResult } from '../types/testCaseResult.js';
 
