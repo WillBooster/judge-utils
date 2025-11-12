@@ -90,9 +90,9 @@ export async function stdioPreset(problemDir: string): Promise<void> {
         printTestCaseResult({
           testCaseId: testCases[0]?.id ?? 'build',
           decisionCode,
-          exitStatus: buildSpawnResult.status ?? 0,
-          stdout: buildSpawnResult.stdout.slice(0, MAX_STDOUT_LENGTH),
-          stderr: buildSpawnResult.stderr.slice(0, MAX_STDOUT_LENGTH),
+          exitStatus: buildSpawnResult.status ?? undefined,
+          stdout: buildSpawnResult.stdout.slice(0, MAX_STDOUT_LENGTH) || undefined,
+          stderr: buildSpawnResult.stderr.slice(0, MAX_STDOUT_LENGTH) || undefined,
           timeSeconds: buildSpawnResult.timeSeconds,
           memoryBytes: buildSpawnResult.memoryBytes,
         });
@@ -154,13 +154,13 @@ export async function stdioPreset(problemDir: string): Promise<void> {
     printTestCaseResult({
       testCaseId: testCase.id,
       decisionCode,
-      exitStatus: spawnResult.status ?? 0,
-      stdin: testCase.stdin ?? '',
-      stdout: spawnResult.stdout.slice(0, MAX_STDOUT_LENGTH),
-      stderr: spawnResult.stderr.slice(0, MAX_STDOUT_LENGTH),
+      exitStatus: spawnResult.status ?? undefined,
+      stdin: testCase.stdin,
+      stdout: spawnResult.stdout.slice(0, MAX_STDOUT_LENGTH) || undefined,
+      stderr: spawnResult.stderr.slice(0, MAX_STDOUT_LENGTH) || undefined,
       timeSeconds: spawnResult.timeSeconds,
       memoryBytes: spawnResult.memoryBytes,
-      outputFiles,
+      outputFiles: outputFiles.length > 0 ? outputFiles : undefined,
     });
   }
 }
