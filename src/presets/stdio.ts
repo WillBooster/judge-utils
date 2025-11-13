@@ -310,7 +310,10 @@ export async function stdioDebugPreset(problemDir: string): Promise<void> {
   }
 
   {
-    const timeoutSeconds = Math.max(DEBUG_DEFAULT_TIMEOUT_SECONDS, (problemMarkdownFrontMatter.timeLimitMs ?? 0) / 1000);
+    const timeoutSeconds = Math.max(
+      DEBUG_DEFAULT_TIMEOUT_SECONDS,
+      (problemMarkdownFrontMatter.timeLimitMs ?? 0) / 1000
+    );
 
     const command = languageDefinition.command(mainFilePath);
 
