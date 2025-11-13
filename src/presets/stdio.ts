@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import path from 'node:path';
 
 import { z } from 'zod';
@@ -8,12 +7,12 @@ import { findMainFile } from '../helpers/findMainFile.js';
 import { getLanguageDefinitionByFilename } from '../helpers/getLanguageDefinitionByFilename.js';
 import { judgeByStaticAnalysis } from '../helpers/judgeByStaticAnalysis.js';
 import { parseArgs } from '../helpers/parseArgs.js';
-import { encodeFileForTestCaseResult, printTestCaseResult } from '../helpers/printTestCaseResult.js';
+import { printTestCaseResult } from '../helpers/printTestCaseResult.js';
+import { readOutputFiles } from '../helpers/readOutputFiles.js';
 import { readProblemMarkdownFrontMatter } from '../helpers/readProblemMarkdownFrontMatter.js';
 import { readTestCases } from '../helpers/readTestCases.js';
 import { spawnSyncWithTimeout } from '../helpers/spawnSyncWithTimeout.js';
 import { DecisionCode } from '../types/decisionCode.js';
-import type { TestCaseResult } from '../types/testCaseResult.js';
 
 const BUILD_TIMEOUT_SECONDS = 10;
 const DEFAULT_TIMEOUT_SECONDS = 2;
@@ -28,10 +27,10 @@ const paramsSchema = z.object({
 /**
  * @example
  * ```ts
- * await stdioPreset(import.meta.dirname);
+ * await stdioJudgePreset(import.meta.dirname);
  * ```
  */
-export async function stdioPreset(problemDir: string): Promise<void> {
+export async function stdioJudgePreset(problemDir: string): Promise<void> {
   const args = parseArgs(process.argv);
   const params = paramsSchema.parse(args.params);
 
@@ -67,12 +66,12 @@ export async function stdioPreset(problemDir: string): Promise<void> {
   // `CI` changes affects Chainlit. `FORCE_COLOR` affects Bun.
   const env = { ...process.env, CI: '', FORCE_COLOR: '0' };
 
-  let renamedMainFilePath: string | undefined;
+  let prebuiltMainFilePath: string | undefined;
 
   if (languageDefinition.prebuild) {
     try {
       await languageDefinition.prebuild(params.cwd);
-      renamedMainFilePath = await findMainFile(params.cwd, params.language);
+      prebuiltMainFilePath = await findMainFile(params.cwd, params.language);
     } catch (error) {
       console.error('prebuild error', error);
 
@@ -85,7 +84,7 @@ export async function stdioPreset(problemDir: string): Promise<void> {
     }
   }
 
-  const mainFilePath = renamedMainFilePath ?? originalMainFilePath;
+  const mainFilePath = prebuiltMainFilePath ?? originalMainFilePath;
 
   if (languageDefinition.buildCommand) {
     try {
@@ -150,15 +149,7 @@ export async function stdioPreset(problemDir: string): Promise<void> {
       timeoutSeconds
     );
 
-    const outputFiles: TestCaseResult['outputFiles'] = [];
-    for (const filePath of problemMarkdownFrontMatter.requiredOutputFilePaths ?? []) {
-      try {
-        const buffer = await fs.promises.readFile(path.join(params.cwd, filePath));
-        outputFiles.push(encodeFileForTestCaseResult(filePath, buffer));
-      } catch {
-        // file not found
-      }
-    }
+    const outputFiles = await readOutputFiles(params.cwd, problemMarkdownFrontMatter.requiredOutputFilePaths ?? []);
 
     let decisionCode: DecisionCode = DecisionCode.ACCEPTED;
 

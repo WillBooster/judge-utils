@@ -1,3 +1,3 @@
-import { stdioPreset } from 'judge-utils/presets/stdio';
+import { stdioJudgePreset } from 'judge-utils/presets/stdio';
 
-await stdioPreset(import.meta.dirname);
+await stdioJudgePreset(import.meta.dirname);
