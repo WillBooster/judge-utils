@@ -5,13 +5,14 @@ import { z } from 'zod';
 
 import { compareStdoutAsSpaceSeparatedTokens } from '../helpers/compareStdoutAsSpaceSeparatedTokens.js';
 import { findMainFile } from '../helpers/findMainFile.js';
+import { getLanguageDefinitionByFilename } from '../helpers/getLanguageDefinitionByFilename.js';
+import { judgeByStaticAnalysis } from '../helpers/judgeByStaticAnalysis.js';
 import { parseArgs } from '../helpers/parseArgs.js';
 import { encodeFileForTestCaseResult, printTestCaseResult } from '../helpers/printTestCaseResult.js';
 import { readProblemMarkdownFrontMatter } from '../helpers/readProblemMarkdownFrontMatter.js';
 import { readTestCases } from '../helpers/readTestCases.js';
 import { spawnSyncWithTimeout } from '../helpers/spawnSyncWithTimeout.js';
 import { DecisionCode } from '../types/decisionCode.js';
-import { languageIdToDefinition } from '../types/language.js';
 import type { TestCaseResult } from '../types/testCaseResult.js';
 
 const BUILD_TIMEOUT_SECONDS = 10;
@@ -37,6 +38,12 @@ export async function stdioPreset(problemDir: string): Promise<void> {
   const problemMarkdownFrontMatter = await readProblemMarkdownFrontMatter(problemDir);
   const testCases = await readTestCases(path.join(problemDir, 'test_cases'));
 
+  const staticAnalysisTestCaseResult = await judgeByStaticAnalysis(params.cwd, problemMarkdownFrontMatter);
+  if (staticAnalysisTestCaseResult) {
+    printTestCaseResult({ testCaseId: testCases[0]?.id ?? 'prebuild', ...staticAnalysisTestCaseResult });
+    return;
+  }
+
   const originalMainFilePath = await findMainFile(params.cwd, params.language);
   if (!originalMainFilePath) {
     printTestCaseResult({
@@ -47,9 +54,7 @@ export async function stdioPreset(problemDir: string): Promise<void> {
     return;
   }
 
-  const languageDefinition = Object.values(languageIdToDefinition).find((d) =>
-    [d.fileExtension].flat().some((e) => originalMainFilePath.endsWith(e))
-  );
+  const languageDefinition = getLanguageDefinitionByFilename(originalMainFilePath);
   if (!languageDefinition) {
     printTestCaseResult({
       testCaseId: testCases[0]?.id ?? 'prebuild',

@@ -5,7 +5,7 @@ import { deleteCommentsInSourceCode } from '../helpers/deleteCommentsInSourceCod
 
 export interface LanguageDefinition {
   /** File extensions to judge with this config. */
-  fileExtension: string | readonly string[];
+  fileExtensions: readonly string[];
 
   /** Function executed before the build. */
   prebuild?(cwd: string): Promise<void>;
@@ -42,21 +42,21 @@ const javaScriptLikeGrammer = {
 
 export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDefinition>>> = {
   c: {
-    fileExtension: '.c',
+    fileExtensions: ['.c'],
     buildCommand: (filePath) => ['gcc', '--std=c17', '-O2', filePath, '-o', 'main'],
     command: () => ['./main'],
     grammer: cLikeGrammer,
   },
 
   cpp: {
-    fileExtension: '.cpp',
+    fileExtensions: ['.cpp'],
     buildCommand: (filePath) => ['g++', '--std=c++20', '-O2', filePath, '-o', 'main'],
     command: () => ['./main'],
     grammer: cLikeGrammer,
   },
 
   csharp: {
-    fileExtension: '.cs',
+    fileExtensions: ['.cs'],
     prebuild: async (cwd) => {
       await fs.promises.writeFile(
         path.join(cwd, 'Main.csproj'),
@@ -78,14 +78,14 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   dart: {
-    fileExtension: '.dart',
+    fileExtensions: ['.dart'],
     buildCommand: (filePath) => ['dart', 'compile', 'exe', filePath, '-o', 'main'],
     command: () => ['./main'],
     grammer: cLikeGrammer,
   },
 
   java: {
-    fileExtension: '.java',
+    fileExtensions: ['.java'],
     prebuild: async (cwd) => {
       const publicClassRegex = /\bpublic\s+class\s+(\w+)\b/;
       for (const dirent of await fs.promises.readdir(cwd, { withFileTypes: true })) {
@@ -102,13 +102,13 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   javascript: {
-    fileExtension: ['.js', '.cjs', '.mjs'],
+    fileExtensions: ['.js', '.cjs', '.mjs'],
     command: (fileName) => ['bun', fileName],
     grammer: javaScriptLikeGrammer,
   },
 
   haskell: {
-    fileExtension: '.hs',
+    fileExtensions: ['.hs'],
     buildCommand: (filePath) => ['ghc', '-o', 'main', filePath],
     command: () => ['./main'],
     grammer: {
@@ -121,7 +121,7 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   php: {
-    fileExtension: '.php',
+    fileExtensions: ['.php'],
     command: (fileName) => ['php', fileName],
     grammer: {
       strings: [
@@ -133,7 +133,7 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   python: {
-    fileExtension: '.py',
+    fileExtensions: ['.py'],
     command: (fileName) => ['python3', fileName],
     grammer: {
       strings: [
@@ -151,7 +151,7 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   ruby: {
-    fileExtension: '.rb',
+    fileExtensions: ['.rb'],
     buildCommand: (fileName) => ['ruby', '-c', fileName],
     command: (fileName) => ['ruby', '--jit', fileName],
     grammer: {
@@ -164,32 +164,32 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   rust: {
-    fileExtension: '.rs',
+    fileExtensions: ['.rs'],
     buildCommand: (filePath) => ['rustc', filePath, '-o', 'main'],
     command: () => ['./main'],
     grammer: cLikeGrammer,
   },
 
   zig: {
-    fileExtension: '.zig',
+    fileExtensions: ['.zig'],
     buildCommand: (filePath) => ['zig', 'build-exe', filePath],
     command: (filePath) => ['./' + filePath.replace(/\.zig$/, '')],
     grammer: cLikeGrammer,
   },
 
   typescript: {
-    fileExtension: ['.ts', '.cts', '.mts'],
+    fileExtensions: ['.ts', '.cts', '.mts'],
     command: (fileName) => ['bun', fileName],
     grammer: javaScriptLikeGrammer,
   },
 
   text: {
-    fileExtension: '.txt',
+    fileExtensions: ['.txt'],
     command: (fileName) => ['cat', fileName],
   },
 
   html: {
-    fileExtension: '.html',
+    fileExtensions: ['.html'],
     command: () => ['echo', ''],
     grammer: {
       strings: [
@@ -201,7 +201,7 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   css: {
-    fileExtension: '.css',
+    fileExtensions: ['.css'],
     command: () => ['echo', ''],
     grammer: {
       strings: [
@@ -213,7 +213,7 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
   },
 
   jsp: {
-    fileExtension: '.jsp',
+    fileExtensions: ['.jsp'],
     command: () => ['echo', ''],
     grammer: {
       strings: [

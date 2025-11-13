@@ -2923,6 +2923,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:24.10.1":
+  version: 24.10.1
+  resolution: "@types/node@npm:24.10.1"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/d6bca7a78f550fbb376f236f92b405d676003a8a09a1b411f55920ef34286ee3ee51f566203920e835478784df52662b5b2af89159d9d319352e9ea21801c002
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^17.0.36":
   version: 17.0.45
   resolution: "@types/node@npm:17.0.45"
@@ -5968,6 +5977,7 @@ __metadata:
   dependencies:
     "@tsconfig/node24": "npm:24.0.1"
     "@types/eslint": "npm:8.56.11"
+    "@types/node": "npm:24.10.1"
     "@willbooster/eslint-config-ts": "npm:11.4.10"
     "@willbooster/prettier-config": "npm:10.2.1"
     build-ts: "npm:16.0.12"
@@ -8817,6 +8827,13 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10c0/83b0a90eca35f778e07cad9622b80c448b6aad457c9ff8e568afed978212b42930a95f9e1be943a1ffa4258a3340fbb899f41461131c05bb1d0a9c303aed8479
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10c0/3033e2f2b5c9f1504bdc5934646cb54e37ecaca0f9249c983f7b1fc2e87c6d18399ebb05dc7fd5419e02b2e915f734d872a65da2e3eeed1813951c427d33cc9a
   languageName: node
   linkType: hard
 

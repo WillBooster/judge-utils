@@ -1,6 +1,9 @@
 ---
-name: A + B（CUI問題）
+name: A + B
 timeLimitMs: 2000
+requiredRegExpsInCode: ['\+']
+forbiddenRegExpsInCode: ['\bsum\s*\(']
+forbiddenTextsInCode: ['some_forbidden_name']
 ---
 
 ## 問題文

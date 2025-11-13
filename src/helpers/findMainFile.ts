@@ -9,7 +9,7 @@ const IGNORED_FILE_EXTENSIONS = ['.DS_Store', '.class'];
 
 export async function findMainFile(cwd: string, language?: string | readonly string[]): Promise<string | undefined> {
   const fileExtensions =
-    language && [language].flat().flatMap((language) => languageIdToDefinition[language]?.fileExtension ?? []);
+    language && [language].flat().flatMap((language) => languageIdToDefinition[language]?.fileExtensions ?? []);
 
   let mainFileName: string | undefined;
   let mainFilePrioryty = -1;
