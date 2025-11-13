@@ -37,8 +37,8 @@ export async function stdioPreset(problemDir: string): Promise<void> {
   const problemMarkdownFrontMatter = await readProblemMarkdownFrontMatter(problemDir);
   const testCases = await readTestCases(path.join(problemDir, 'test_cases'));
 
-  const mainFilePath = await findMainFile(params.cwd, params.language);
-  if (!mainFilePath) {
+  const originalMainFilePath = await findMainFile(params.cwd, params.language);
+  if (!originalMainFilePath) {
     printTestCaseResult({
       testCaseId: testCases[0]?.id ?? 'prebuild',
       decisionCode: DecisionCode.MISSING_REQUIRED_SUBMISSION_FILE_ERROR,
@@ -48,7 +48,7 @@ export async function stdioPreset(problemDir: string): Promise<void> {
   }
 
   const languageDefinition = Object.values(languageIdToDefinition).find((d) =>
-    [d.fileExtension].flat().some((e) => mainFilePath.endsWith(e))
+    [d.fileExtension].flat().some((e) => originalMainFilePath.endsWith(e))
   );
   if (!languageDefinition) {
     printTestCaseResult({
@@ -62,9 +62,12 @@ export async function stdioPreset(problemDir: string): Promise<void> {
   // `CI` changes affects Chainlit. `FORCE_COLOR` affects Bun.
   const env = { ...process.env, CI: '', FORCE_COLOR: '0' };
 
+  let renamedMainFilePath: string | undefined;
+
   if (languageDefinition.prebuild) {
     try {
       await languageDefinition.prebuild(params.cwd);
+      renamedMainFilePath = await findMainFile(params.cwd, params.language);
     } catch (error) {
       console.error('prebuild error', error);
 
@@ -76,6 +79,8 @@ export async function stdioPreset(problemDir: string): Promise<void> {
       return;
     }
   }
+
+  const mainFilePath = renamedMainFilePath ?? originalMainFilePath;
 
   if (languageDefinition.buildCommand) {
     try {
