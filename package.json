@@ -1,12 +1,12 @@
 {
-  "name": "judge-utils",
+  "name": "@exercode/problem-utils",
   "version": "0.0.0-semantically-released",
   "description": ":100: A set of utilities for judging programs on Exercode (https://exercode.willbooster.com/).",
   "keywords": [
     "exercode",
     "judge"
   ],
-  "repository": "github:WillBooster/judge-utils",
+  "repository": "github:WillBooster/problem-utils",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
   "sideEffects": false,

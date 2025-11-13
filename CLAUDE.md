@@ -1,6 +1,6 @@
 ## Project Information
 
-- Name: judge-utils
+- Name: problem-utils
 - Description: undefined
 - Package Manager: yarn
 
