@@ -77,6 +77,18 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
     grammer: cLikeGrammer,
   },
 
+  css: {
+    fileExtensions: ['.css'],
+    command: () => ['echo', ''],
+    grammer: {
+      strings: [
+        { open: /'/, close: /(?<!\\)(?:\\{2})*'/ },
+        { open: /"/, close: /(?<!\\)(?:\\{2})*"/ },
+      ],
+      comments: [{ open: /\n?[ \t]*\/\*/, close: /\*\// }],
+    },
+  },
+
   dart: {
     fileExtensions: ['.dart'],
     buildCommand: (filePath) => ['dart', 'compile', 'exe', filePath, '-o', 'main'],
@@ -107,6 +119,23 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
     grammer: javaScriptLikeGrammer,
   },
 
+  jsp: {
+    fileExtensions: ['.jsp'],
+    command: () => ['echo', ''],
+    grammer: {
+      strings: [
+        { open: /'/, close: /(?<!\\)(?:\\{2})*'/ },
+        { open: /"/, close: /(?<!\\)(?:\\{2})*"/ },
+      ],
+      comments: [
+        { open: /\n?[ \t]*<!--/, close: /-->/ },
+        { open: /\n?[ \t]*<%--/, close: /--%>/ },
+        { open: /\n?[ \t]*\/\*/, close: /\*\// },
+        { open: /\n?[ \t]*\/\// },
+      ],
+    },
+  },
+
   haskell: {
     fileExtensions: ['.hs'],
     buildCommand: (filePath) => ['ghc', '-o', 'main', filePath],
@@ -117,6 +146,18 @@ export const languageIdToDefinition: Readonly<Record<string, Readonly<LanguageDe
         { open: /"/, close: /(?<!\\)(?:\\{2})*"/ },
       ],
       comments: [{ open: /\n?[ \t]*\{-/, close: /-\}/ }, { open: /\n?[ \t]*--/ }],
+    },
+  },
+
+  html: {
+    fileExtensions: ['.html'],
+    command: () => ['echo', ''],
+    grammer: {
+      strings: [
+        { open: /'/, close: /(?<!\\)(?:\\{2})*'/ },
+        { open: /"/, close: /(?<!\\)(?:\\{2})*"/ },
+      ],
+      comments: [{ open: /\n?[ \t]*<!--/, close: /-->/ }],
     },
   },
 
