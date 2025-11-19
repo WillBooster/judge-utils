@@ -6,7 +6,7 @@
     "exercode",
     "judge"
   ],
-  "repository": "github:WillBooster/problem-utils",
+  "repository": "github:WillBooster/exercode-problem-utils",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
   "sideEffects": false,

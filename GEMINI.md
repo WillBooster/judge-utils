@@ -1,6 +1,6 @@
 ## Project Information
 
-- Name: problem-utils
+- Name: @exercode/problem-utils
 - Description: undefined
 - Package Manager: yarn
 
